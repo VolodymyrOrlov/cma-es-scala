@@ -4,9 +4,15 @@ import breeze.linalg.{DenseVector, _}
 
 import scala.annotation.tailrec
 
-class CMAESDriver(initialX: DenseVector[Double], initialStd: DenseVector[Double]) {
+class CMAESDriver(fitFunction: PartialFunction[DenseMatrix[Double], DenseVector[Double]]) {
 
-  def optimize(fitFunction: PartialFunction[DenseMatrix[Double], DenseVector[Double]], stopFunction: StopCondition): DenseVector[Double] = {
+  def optimize(lambda: Int, initialX: Double, initialStd: Double, stopFunction: StopCondition): DenseVector[Double] = {
+    optimize(DenseVector.fill(lambda)(initialX), DenseVector.fill(lambda)(initialStd), stopFunction)
+  }
+
+  def optimize(initialX: DenseVector[Double], initialStd: DenseVector[Double], stopFunction: StopCondition): DenseVector[Double] = {
+
+    assert(initialX.length == initialStd.length, "|initialX| should = |initialStd|")
 
     @tailrec
     def optimize(strategy: CMAEvolutionStrategy, i: Integer, bestFitness: Double, bestSolution: DenseVector[Double]): DenseVector[Double] = {
@@ -33,13 +39,8 @@ class CMAESDriver(initialX: DenseVector[Double], initialStd: DenseVector[Double]
 
 object CMAESDriver {
 
-  def apply(lambda: Int, initialX: Double, initialStd: Double): CMAESDriver = {
-    new CMAESDriver(DenseVector.fill(lambda)(initialX), DenseVector.fill(lambda)(initialStd))
-  }
-
-  def apply(initialX: DenseVector[Double], initialStd: DenseVector[Double]): CMAESDriver = {
-    assert(initialX.length == initialStd.length, "|initialX| should = |initialStd|")
-    new CMAESDriver(initialX, initialStd)
+  def apply(objFunction: PartialFunction[DenseMatrix[Double], DenseVector[Double]]): CMAESDriver = {
+    new CMAESDriver(objFunction)
   }
 
 }

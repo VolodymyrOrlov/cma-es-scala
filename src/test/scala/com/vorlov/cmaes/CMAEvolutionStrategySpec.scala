@@ -8,7 +8,6 @@ class CMAEvolutionStrategySpec extends WordSpec {
   val rosenbrock = ParallelObjectiveFunction ({
 
     case x: DenseVector[Double] => {
-      Thread.sleep(5)
           (for (i <- 0 until x.length - 1) yield {
             100 * (x(i) * x(i) - x(i + 1)) * (x(i) * x(i) - x(i + 1)) +
               (x(i) - 1.0) * (x(i) - 1.0);
@@ -24,8 +23,8 @@ class CMAEvolutionStrategySpec extends WordSpec {
   "CMAEvolutionStrategy" should {
     "produce correct initial population" in {
 
-      val driver = CMAESDriver(5, 0.05, 0.2)
-      println(driver.optimize(rosenbrock, stopFunction))
+      val driver = CMAESDriver(rosenbrock)
+      println(driver.optimize(5, 0.05, 0.2, stopFunction))
     }
   }
 

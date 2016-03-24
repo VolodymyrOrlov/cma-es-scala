@@ -1,9 +1,9 @@
 package com.vorlov.cmaes
 
 import breeze.linalg._
-import org.scalatest.WordSpec
+import org.scalatest.{Matchers, WordSpec}
 
-class CMAEvolutionStrategySpec extends WordSpec {
+class CMAEvolutionStrategySpec extends WordSpec with Matchers {
 
   val rosenbrock = ParallelObjectiveFunction ({
 
@@ -16,15 +16,26 @@ class CMAEvolutionStrategySpec extends WordSpec {
 
   })
 
-  val stopFunction: StopCondition = (iteration: Int, fitness: DenseVector[Double]) => {
-      iteration >= 6000 || fitness.fold(Double.MaxValue)((a, b) => math.min(a, b)) < 1e-14
-  }
-
   "CMAEvolutionStrategy" should {
     "produce correct initial population" in {
 
+      var iterationsSpent = 0
+
       val driver = CMAESDriver(rosenbrock)
-      println(driver.optimize(5, 0.05, 0.2, stopFunction))
+
+      val stopFunction: StopCondition = (iteration: Int, fitness: DenseVector[Double]) => {
+        iterationsSpent += 1
+        iteration >= 6000 || fitness.fold(Double.MaxValue)((a, b) => math.min(a, b)) < 1e-14
+      }
+
+      val expected = Array(1.0, 1.0, 1.0, 1.0, 1.0)
+
+      val result = driver.optimize(5, 0.05, 0.2, stopFunction).toArray
+
+      for (i <- 0 until result.size) result(i) should be (expected(i) +- 0.1)
+
+      iterationsSpent should be (500 +- 200)
+
     }
   }
 

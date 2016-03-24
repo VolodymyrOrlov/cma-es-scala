@@ -26,7 +26,7 @@ case class CMAEvolutionStrategy(iteration: Int,  lambda: Int, n: Int, ps: DenseV
 
   val damps = 1.0 + 2.0*math.max(0.0, math.sqrt((mueff-1.0)/(n + 1.0))-1.0) + cs
 
-  def samplePopulation(): DenseVector[DenseVector[Double]] = {
+  def samplePopulation(): DenseMatrix[Double] = {
 
     val g = breeze.stats.distributions.Gaussian(0,1)
 
@@ -35,18 +35,18 @@ case class CMAEvolutionStrategy(iteration: Int,  lambda: Int, n: Int, ps: DenseV
         xMean + sigma * b * (d :* g.samplesVector(n))
     }
 
-    val distribution = new DenseVector(s.toArray)
+    val distribution = DenseMatrix(new DenseVector(s.toArray).valuesIterator.map(_.valuesIterator.toArray).toSeq: _*)
 
     distribution
 
   }
 
-  def updateDistribution(population: DenseVector[DenseVector[Double]], fitness: DenseVector[Double]): CMAEvolutionStrategy = {
+  def updateDistribution(population: DenseMatrix[Double], fitness: DenseVector[Double]): CMAEvolutionStrategy = {
 
     val arfitness = argsort(fitness)
 
     val selected = DenseVector((0 until mu).map{
-      idx => population(arfitness(idx))
+      idx => population(arfitness(idx), ::).inner
     } toArray)
 
     val newXMean = DenseVector.zeros[Double](n).mapPairs {

@@ -6,16 +6,16 @@ import scala.annotation.tailrec
 
 class CMAESDriver(initialX: DenseVector[Double], initialStd: DenseVector[Double]) {
 
-  def optimize(fitFunction: PartialFunction[DenseVector[Double], Double], stopFunction: StopCondition): DenseVector[Double] = {
+  def optimize(fitFunction: PartialFunction[DenseMatrix[Double], DenseVector[Double]], stopFunction: StopCondition): DenseVector[Double] = {
 
     @tailrec
-    def optimize(strategy: CMAEvolutionStrategy, i: Integer, bestFitness: Double, bestSolution: DenseVector[Double]): DenseVector[Double] ={
+    def optimize(strategy: CMAEvolutionStrategy, i: Integer, bestFitness: Double, bestSolution: DenseVector[Double]): DenseVector[Double] = {
       val population = strategy.samplePopulation()
-      val fitness = population.map(fitFunction)
+      val fitness = fitFunction(population)
       val bestSolutionIdx = argsort(fitness).head
 
       val (newBestFitness, newBestSolution) =  if(bestFitness > fitness(bestSolutionIdx)){
-        (fitness(bestSolutionIdx), population(bestSolutionIdx))
+        (fitness(bestSolutionIdx), population(bestSolutionIdx, ::).inner)
       } else {
         (bestFitness, bestSolution)
       }

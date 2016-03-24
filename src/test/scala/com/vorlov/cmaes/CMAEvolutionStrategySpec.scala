@@ -1,20 +1,21 @@
 package com.vorlov.cmaes
 
-import breeze.linalg.DenseVector
+import breeze.linalg._
 import org.scalatest.WordSpec
 
 class CMAEvolutionStrategySpec extends WordSpec {
 
-  val rosenbrock: PartialFunction[DenseVector[Double], Double]  = {
+  val rosenbrock = ParallelObjectiveFunction ({
+
     case x: DenseVector[Double] => {
-      var res = 0.0;
-      for (i <- 0 until x.length - 1) {
-        res += 100 * (x(i) * x(i) - x(i + 1)) * (x(i) * x(i) - x(i + 1)) +
-          (x(i) - 1.0) * (x(i) - 1.0);
-      }
-      res
+      Thread.sleep(5)
+          (for (i <- 0 until x.length - 1) yield {
+            100 * (x(i) * x(i) - x(i + 1)) * (x(i) * x(i) - x(i + 1)) +
+              (x(i) - 1.0) * (x(i) - 1.0);
+          }).sum
     }
-  }
+
+  })
 
   val stopFunction: StopCondition = (iteration: Int, fitness: DenseVector[Double]) => {
       iteration >= 6000 || fitness.fold(Double.MaxValue)((a, b) => math.min(a, b)) < 1e-14

@@ -14,6 +14,7 @@ Here is a minimal working example of library usage:
  ```scala
   
    import com.vorlov.cmaes._
+   import breeze.linalg._
  
    val rosenbrock = ParallelObjectiveFunction ({ // a non-convex function we want to optimize
      case x: DenseVector[Double] => {
@@ -29,7 +30,7 @@ Here is a minimal working example of library usage:
    val result = driver.optimize(5, // population size
      0.05, // initial value
      0.2, // initial standard deviation
-     iterationsExceeded(6000) orElse lowVariance(1e-14) orElse countIteration orElse proceed // stop condition
+     iterationsExceeded(6000) orElse lowVariance(1e-14) orElse minFitnessReached(1e-14) orElse proceed // stop condition
      )
    
    ```

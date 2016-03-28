@@ -1,7 +1,7 @@
 # Covariance Matrix Adaptation Evolution Strategy
 
 This project is a minimalistic Scala version of the CMA-ES algorithm as described in 
-(this paper)[https://www.lri.fr/~hansen/cmatutorial.pdf]. This implementation is not as full as Java version however it provides certain 
+[this paper](https://www.lri.fr/~hansen/cmatutorial.pdf). This implementation is not as full as Java version however it provides certain 
 benefits compared to the latter one:
 
 * It is much more compact and straightforward.

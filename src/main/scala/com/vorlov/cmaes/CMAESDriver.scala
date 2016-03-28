@@ -4,12 +4,31 @@ import breeze.linalg.{DenseVector, _}
 
 import scala.annotation.tailrec
 
-class CMAESDriver(fitFunction: PartialFunction[DenseMatrix[Double], DenseVector[Double]]) {
+/**
+  * A driver for the [[com.vorlov.cmaes.CMAEvolutionStrategy]].
+  * @param fitFunction a function that is being optimized.
+  */
+case class CMAESDriver(private val fitFunction: PartialFunction[DenseMatrix[Double], DenseVector[Double]]) {
 
+  /**
+    * Optimize given fitness function to its minimum value.
+    * @param lambda population size.
+    * @param initialX initial solution.
+    * @param initialStd initial standard deviation of first population.
+    * @return best solution of the given fitness function.
+    * @param stopFunction a partial function that will be used to decide when optimal value has been reached.
+    */
   def optimize(lambda: Int, initialX: Double, initialStd: Double, stopFunction: StopCondition): DenseVector[Double] = {
     optimize(DenseVector.fill(lambda)(initialX), DenseVector.fill(lambda)(initialStd), stopFunction)
   }
 
+  /**
+    * Optimize given fitness function to its minimum value.
+    * @param initialX a vector of initial solutions where |initialX| is size of population.
+    * @param initialStd a vector of standard deviation of initial population where |initialX| is size of population.
+    * @param stopFunction a partial function that will be used to decide when optimal value has been reached.
+    * @return a partial function that will be used to decide when optimal value has been reached.
+    */
   def optimize(initialX: DenseVector[Double], initialStd: DenseVector[Double], stopFunction: StopCondition): DenseVector[Double] = {
 
     assert(initialX.length == initialStd.length, "|initialX| should = |initialStd|")
@@ -33,14 +52,6 @@ class CMAESDriver(fitFunction: PartialFunction[DenseMatrix[Double], DenseVector[
 
     optimize(CMAEvolutionStrategy(initialX.length, initialX, initialStd), 1, Double.MaxValue, initialX)
 
-  }
-
-}
-
-object CMAESDriver {
-
-  def apply(objFunction: PartialFunction[DenseMatrix[Double], DenseVector[Double]]): CMAESDriver = {
-    new CMAESDriver(objFunction)
   }
 
 }

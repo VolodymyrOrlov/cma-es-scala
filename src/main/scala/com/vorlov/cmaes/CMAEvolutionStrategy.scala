@@ -4,28 +4,47 @@ import breeze.linalg._
 import breeze.linalg.eigSym.EigSym
 import breeze.numerics._
 
-case class CMAEvolutionStrategy(iteration: Int,  lambda: Int, n: Int, ps: DenseVector[Double],  pc: DenseVector[Double], b: DenseMatrix[Double], c: DenseMatrix[Double], d: DenseVector[Double], sigma: Double, xMean: DenseVector[Double]) {
+/**
+  * A minimalistic implementation of Covariance Matrix Adaptation Evolution Strategy. For algorithm description please
+  * visit [[https://en.wikipedia.org/wiki/CMA-ES]]. This class ideally should not be used directly. Please use
+  * [[com.vorlov.cmaes.CMAESDriver]] class.
+  */
+class CMAEvolutionStrategy private [cmaes] (iteration: Int,
+                                                lambda: Int,
+                                                n: Int,
+                                                ps: DenseVector[Double],
+                                                pc: DenseVector[Double],
+                                                b: DenseMatrix[Double],
+                                                c: DenseMatrix[Double],
+                                                d: DenseVector[Double],
+                                                sigma: Double,
+                                                xMean: DenseVector[Double]
+                                               ) {
 
-  val mu = math.floor(lambda/2).toInt
+  private val mu = math.floor(lambda/2).toInt
 
-  val (weights, mueff): (DenseVector[Double], Double) = {
+  private val (weights, mueff): (DenseVector[Double], Double) = {
     val w = DenseVector.fill(mu)(math.log(mu + 1.0)) - DenseVector((0 until mu).map(v => math.log(v + 1.0)).toArray)
     val weights: DenseVector[Double] = w / sum(w)
     (weights, (sum(weights) * sum(weights)) / sum(weights :* weights))
   }
 
-  val cs = (mueff+2) / (n+mueff+3)
+  private val cs = (mueff+2) / (n+mueff+3)
 
-  val cc = 4.0 / (n + 4.0)
+  private val cc = 4.0 / (n + 4.0)
 
-  val c1 = 2 / (math.pow(n + 1.3, 2) + mueff)
+  private val c1 = 2 / (math.pow(n + 1.3, 2) + mueff)
 
-  val cmu = min(1 - c1, 2 * (mueff - 2 + 1 / mueff) / (math.pow(n+2, 2) + mueff))
+  private val cmu = min(1 - c1, 2 * (mueff - 2 + 1 / mueff) / (math.pow(n+2, 2) + mueff))
 
-  val chiN = math.sqrt(n) * (1.0 - 1.0 / (4.0 * n) + 1.0 / (21.0 * n * n))
+  private val chiN = math.sqrt(n) * (1.0 - 1.0 / (4.0 * n) + 1.0 / (21.0 * n * n))
 
-  val damps = 1.0 + 2.0*math.max(0.0, math.sqrt((mueff-1.0)/(n + 1.0))-1.0) + cs
+  private val damps = 1.0 + 2.0*math.max(0.0, math.sqrt((mueff-1.0)/(n + 1.0))-1.0) + cs
 
+  /**
+    * Generate a new population of solutions.
+    * @return a new generation of solutions.
+    */
   def samplePopulation(): DenseMatrix[Double] = {
 
     val g = breeze.stats.distributions.Gaussian(0,1)
@@ -41,6 +60,12 @@ case class CMAEvolutionStrategy(iteration: Int,  lambda: Int, n: Int, ps: DenseV
 
   }
 
+  /**
+    * Update search distribution.
+    * @param population current population.
+    * @param fitness fitness of current population.
+    * @return a copy of CMAEvolutionStrategy with updated state.
+    */
   def updateDistribution(population: DenseMatrix[Double], fitness: DenseVector[Double]): CMAEvolutionStrategy = {
 
     val arfitness = argsort(fitness)
@@ -84,14 +109,17 @@ case class CMAEvolutionStrategy(iteration: Int,  lambda: Int, n: Int, ps: DenseV
 
     val EigSym(nD, nB) = eigSym(nC)
 
-    this.copy(
-      pc = pcN,
-      ps = psN,
-      b = nB,
-      d = sqrt(nD),
-      c = nC,
-      sigma = sigmaN,
-      xMean = newXMean
+    new CMAEvolutionStrategy(
+      iteration,
+      lambda,
+      n,
+      psN,
+      pcN,
+      nB,
+      nC,
+      sqrt(nD),
+      sigmaN,
+      newXMean
     )
 
   }
@@ -100,6 +128,13 @@ case class CMAEvolutionStrategy(iteration: Int,  lambda: Int, n: Int, ps: DenseV
 }
 
 object CMAEvolutionStrategy {
+  /**
+    * Instanciates a copy of CMAEvolutionStrategy from initial population with given initial distribution.
+    * @param lambda population size.
+    * @param initialX initial solution.
+    * @param initialStd initial standard deviation of first population.
+    * @return an instance of [[com.vorlov.cmaes.CMAEvolutionStrategy]]
+    */
   def apply(lambda: Int, initialX: DenseVector[Double], initialStd: DenseVector[Double]): CMAEvolutionStrategy = {
 
     new CMAEvolutionStrategy(

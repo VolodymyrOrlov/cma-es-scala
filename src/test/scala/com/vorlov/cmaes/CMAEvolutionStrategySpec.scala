@@ -17,24 +17,26 @@ class CMAEvolutionStrategySpec extends WordSpec with Matchers {
   })
 
   "CMAEvolutionStrategy" should {
-    "produce correct initial population" in {
+    "produce correct result for the Rosenbrock function" in {
 
       var iterationsSpent = 0
 
       val driver = CMAESDriver(rosenbrock)
 
-      val stopFunction: StopCondition = (iteration: Int, fitness: DenseVector[Double]) => {
-        iterationsSpent += 1
-        iteration >= 6000 || fitness.fold(Double.MaxValue)((a, b) => math.min(a, b)) < 1e-14
+      val countIteration: StopCondition = {
+        case _ => {
+          iterationsSpent += 1
+          false
+        }
       }
 
       val expected = Array(1.0, 1.0, 1.0, 1.0, 1.0)
 
-      val result = driver.optimize(5, 0.05, 0.2, stopFunction).toArray
+      val result = driver.optimize(5, 0.05, 0.2, iterationsExceeded(6000) orElse lowVariance(1e-14) orElse countIteration).toArray
 
-      for (i <- 0 until result.size) result(i) should be (expected(i) +- 0.1)
+      for (i <- 0 until result.size) result(i) should be(expected(i) +- 0.1)
 
-      iterationsSpent should be (500 +- 200)
+      iterationsSpent should be(500 +- 200)
 
     }
   }

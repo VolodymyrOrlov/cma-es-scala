@@ -1,15 +1,15 @@
 # Covariance Matrix Adaptation Evolution Strategy
 
-This project is a minimalistic Scala version of the CMA-ES algorithm as described in 
-[this paper](https://www.lri.fr/~hansen/cmatutorial.pdf). This implementation is not as full as Java version however it provides certain 
-benefits compared to the latter one:
+This library is a minimalistic Scala version of the CMA-ES algorithm as described in 
+[this paper](https://www.lri.fr/~hansen/cmatutorial.pdf). The implementation is not as full as Java version of the  
+ algorithm however it provides certain benefits compared to the latter one:
 
-* It is much more compact and straightforward.
-* Its objective function can be run in parrallel. This might help to reduce optimization time if takes
-long time to compute your fitness function.
+* This implementation is more compact and straightforward.
+* In Scala version objective function can be evaluated in parallel. This might help to reduce optimization time if it 
+takes long time to compute your fitness function.
 * The strategy implementation is stateless and idempotent.
 
-Here is a minimal working example of library usage:
+Here is a minimal working example.:
  
  ```scala
   

@@ -13,7 +13,7 @@ Here is a minimal working example.:
  
  ```scala
   
-   import com.vorlov.cmaes._
+   import com.sungevity.cmaes._
    import breeze.linalg._
  
    val rosenbrock = ParallelObjectiveFunction ({ // a non-convex function we want to optimize

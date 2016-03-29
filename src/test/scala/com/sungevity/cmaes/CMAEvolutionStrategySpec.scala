@@ -1,4 +1,4 @@
-package com.vorlov.cmaes
+package com.sungevity.cmaes
 
 import breeze.linalg._
 import org.scalatest.{Matchers, WordSpec}

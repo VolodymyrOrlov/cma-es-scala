@@ -1,4 +1,4 @@
-package com.vorlov
+package com.sungevity
 
 import breeze.linalg._
 import breeze.stats._

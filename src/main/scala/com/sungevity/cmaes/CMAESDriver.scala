@@ -1,17 +1,20 @@
-package com.vorlov.cmaes
+package com.sungevity.cmaes
 
 import breeze.linalg.{DenseVector, _}
+import com.sungevity.cmaes
 
 import scala.annotation.tailrec
 
 /**
-  * A driver for the [[com.vorlov.cmaes.CMAEvolutionStrategy]].
+  * A driver for the [[cmaes.CMAEvolutionStrategy]].
+ *
   * @param fitFunction a function that is being optimized.
   */
 case class CMAESDriver(private val fitFunction: PartialFunction[DenseMatrix[Double], DenseVector[Double]]) {
 
   /**
     * Optimize given fitness function to its minimum value.
+ *
     * @param lambda population size.
     * @param initialX initial solution.
     * @param initialStd initial standard deviation of first population.
@@ -24,6 +27,7 @@ case class CMAESDriver(private val fitFunction: PartialFunction[DenseMatrix[Doub
 
   /**
     * Optimize given fitness function to its minimum value.
+ *
     * @param initialX a vector of initial solutions where |initialX| is size of population.
     * @param initialStd a vector of standard deviation of initial population where |initialX| is size of population.
     * @param stopFunction a partial function that will be used to decide when optimal value has been reached.

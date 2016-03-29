@@ -1,13 +1,14 @@
-package com.vorlov.cmaes
+package com.sungevity.cmaes
 
 import breeze.linalg._
 import breeze.linalg.eigSym.EigSym
 import breeze.numerics._
+import com.sungevity.cmaes
 
 /**
   * A minimalistic implementation of Covariance Matrix Adaptation Evolution Strategy. For algorithm description please
   * visit [[https://en.wikipedia.org/wiki/CMA-ES]]. This class ideally should not be used directly. Please use
-  * [[com.vorlov.cmaes.CMAESDriver]] class.
+  * [[com.sungevity.cmaes.CMAESDriver]] class.
   */
 class CMAEvolutionStrategy private [cmaes] (iteration: Int,
                                                 lambda: Int,
@@ -43,6 +44,7 @@ class CMAEvolutionStrategy private [cmaes] (iteration: Int,
 
   /**
     * Generate a new population of solutions.
+ *
     * @return a new generation of solutions.
     */
   def samplePopulation(): DenseMatrix[Double] = {
@@ -62,6 +64,7 @@ class CMAEvolutionStrategy private [cmaes] (iteration: Int,
 
   /**
     * Update search distribution.
+ *
     * @param population current population.
     * @param fitness fitness of current population.
     * @return a copy of CMAEvolutionStrategy with updated state.
@@ -130,10 +133,11 @@ class CMAEvolutionStrategy private [cmaes] (iteration: Int,
 object CMAEvolutionStrategy {
   /**
     * Instanciates a copy of CMAEvolutionStrategy from initial population with given initial distribution.
+ *
     * @param lambda population size.
     * @param initialX initial solution.
     * @param initialStd initial standard deviation of first population.
-    * @return an instance of [[com.vorlov.cmaes.CMAEvolutionStrategy]]
+    * @return an instance of [[cmaes.CMAEvolutionStrategy]]
     */
   def apply(lambda: Int, initialX: DenseVector[Double], initialStd: DenseVector[Double]): CMAEvolutionStrategy = {
 

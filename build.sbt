@@ -1,6 +1,6 @@
 name := "cma-es-scala"
 
-organization := "com.vorlov"
+organization := "com.sungevity"
 
 version := "1.0.1"
 

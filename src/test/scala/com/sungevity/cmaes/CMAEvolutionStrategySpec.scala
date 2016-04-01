@@ -32,7 +32,7 @@ class CMAEvolutionStrategySpec extends WordSpec with Matchers {
 
       val expected = Array(1.0, 1.0, 1.0, 1.0, 1.0)
 
-      val result = driver.optimize(5, 0.05, 0.2, iterationsExceeded(6000) orElse lowVariance(1e-14) orElse
+      val result = driver.optimize(5, 5, 0.05, 0.2, iterationsExceeded(6000) orElse lowVariance(1e-14) orElse
         minFitnessReached(1e-14) orElse countIteration).toArray
 
       for (i <- 0 until result.size) result(i) should be(expected(i) +- 0.1)

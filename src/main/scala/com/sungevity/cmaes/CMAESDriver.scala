@@ -14,15 +14,16 @@ case class CMAESDriver(private val fitFunction: PartialFunction[DenseMatrix[Doub
 
   /**
     * Optimize given fitness function to its minimum value.
- *
+    *
     * @param lambda population size.
+    * @param dimentions search space dimensions
     * @param initialX initial solution.
     * @param initialStd initial standard deviation of first population.
     * @return best solution of the given fitness function.
     * @param stopFunction a partial function that will be used to decide when optimal value has been reached.
     */
-  def optimize(lambda: Int, initialX: Double, initialStd: Double, stopFunction: StopCondition): DenseVector[Double] = {
-    optimize(DenseVector.fill(lambda)(initialX), DenseVector.fill(lambda)(initialStd), stopFunction)
+  def optimize(lambda: Int, dimentions: Int, initialX: Double, initialStd: Double, stopFunction: StopCondition): DenseVector[Double] = {
+    optimize(lambda, DenseVector.fill(dimentions)(initialX), DenseVector.fill(dimentions)(initialStd), stopFunction)
   }
 
   /**
@@ -33,7 +34,7 @@ case class CMAESDriver(private val fitFunction: PartialFunction[DenseMatrix[Doub
     * @param stopFunction a partial function that will be used to decide when optimal value has been reached.
     * @return a partial function that will be used to decide when optimal value has been reached.
     */
-  def optimize(initialX: DenseVector[Double], initialStd: DenseVector[Double], stopFunction: StopCondition): DenseVector[Double] = {
+  def optimize(lambda: Int, initialX: DenseVector[Double], initialStd: DenseVector[Double], stopFunction: StopCondition): DenseVector[Double] = {
 
     assert(initialX.length == initialStd.length, "|initialX| should = |initialStd|")
 
@@ -54,7 +55,7 @@ case class CMAESDriver(private val fitFunction: PartialFunction[DenseMatrix[Doub
       } else bestSolution
     }
 
-    optimize(CMAEvolutionStrategy(initialX.length, initialX, initialStd), 1, Double.MaxValue, initialX)
+    optimize(CMAEvolutionStrategy(lambda, initialX, initialStd), 1, Double.MaxValue, initialX)
 
   }
 

@@ -149,7 +149,7 @@ object CMAEvolutionStrategy {
       DenseVector.zeros[Double](initialX.length),
       DenseMatrix.eye[Double](initialX.length),
       diag(initialStd),
-      DenseVector.ones[Double](lambda),
+      DenseVector.ones[Double](initialX.length),
       0.2,
       initialX)
   }

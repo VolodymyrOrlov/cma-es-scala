@@ -16,14 +16,14 @@ case class CMAESDriver(private val fitFunction: PartialFunction[DenseMatrix[Doub
     * Optimize given fitness function to its minimum value.
     *
     * @param lambda population size.
-    * @param dimentions search space dimensions
+    * @param dimensions search space dimensions
     * @param initialX initial solution.
     * @param initialStd initial standard deviation of first population.
     * @return best solution of the given fitness function.
     * @param stopFunction a partial function that will be used to decide when optimal value has been reached.
     */
-  def optimize(lambda: Int, dimentions: Int, initialX: Double, initialStd: Double, stopFunction: StopCondition): DenseVector[Double] = {
-    optimize(lambda, DenseVector.fill(dimentions)(initialX), DenseVector.fill(dimentions)(initialStd), stopFunction)
+  def optimize(lambda: Int, dimensions: Int, initialX: Double, initialStd: Double, stopFunction: StopCondition): DenseVector[Double] = {
+    optimize(lambda, DenseVector.fill(dimensions)(initialX), DenseVector.fill(dimensions)(initialStd), stopFunction)
   }
 
   /**

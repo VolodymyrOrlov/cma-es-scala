@@ -27,7 +27,8 @@ Here is a minimal working example.:
    
    val driver = CMAESDriver(rosenbrock) // instantiate a driver  
    
-   val result = driver.optimize(5, 5, // population size
+   val result = driver.optimize(5, // population size
+     5, // search space size
      0.05, // initial value
      0.2, // initial standard deviation
      iterationsExceeded(6000) orElse lowVariance(1e-14) orElse minFitnessReached(1e-14) orElse proceed // stop condition

@@ -1,7 +1,7 @@
 # Covariance Matrix Adaptation Evolution Strategy
 
 This library is a minimalistic Scala version of the CMA-ES algorithm as described in 
-[this paper](https://www.lri.fr/~hansen/cmatutorial.pdf). The implementation is not as full as Java version of the  
+[this paper](http://arxiv.org/pdf/1604.00772v1.pdf). The implementation is not as full as Java version of the  
  algorithm however it provides certain benefits compared to the latter one:
 
 * This implementation is more compact and straightforward.

@@ -10,7 +10,7 @@ import com.sungevity.cmaes
   * visit [[https://en.wikipedia.org/wiki/CMA-ES]]. This class ideally should not be used directly. Please use
   * [[com.sungevity.cmaes.CMAESDriver]] class.
   */
-class CMAEvolutionStrategy private [cmaes] (iteration: Int,
+class CMAEvolutionStrategy private [cmaes] (val iteration: Int,
                                                 lambda: Int,
                                                 n: Int,
                                                 ps: DenseVector[Double],

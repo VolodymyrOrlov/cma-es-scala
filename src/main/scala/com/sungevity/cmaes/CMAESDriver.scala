@@ -39,7 +39,7 @@ case class CMAESDriver(private val fitFunction: PartialFunction[DenseMatrix[Doub
     assert(initialX.length == initialStd.length, "|initialX| should = |initialStd|")
 
     @tailrec
-    def optimize(strategy: CMAEvolutionStrategy, i: Integer, bestFitness: Double, bestSolution: DenseVector[Double]): DenseVector[Double] = {
+    def optimize(strategy: CMAEvolutionStrategy, bestFitness: Double, bestSolution: DenseVector[Double]): DenseVector[Double] = {
       val population = strategy.samplePopulation()
       val fitness = fitFunction(population)
       val bestSolutionIdx = argsort(fitness).head
@@ -50,12 +50,12 @@ case class CMAESDriver(private val fitFunction: PartialFunction[DenseMatrix[Doub
         (bestFitness, bestSolution)
       }
 
-      if(!stopFunction(i, fitness)){
-        optimize(strategy.updateDistribution(population, fitness), i + 1, newBestFitness, newBestSolution)
+      if(!stopFunction(strategy.iteration, fitness)){
+        optimize(strategy.updateDistribution(population, fitness), newBestFitness, newBestSolution)
       } else bestSolution
     }
 
-    optimize(CMAEvolutionStrategy(lambda, initialX, initialStd), 1, Double.MaxValue, initialX)
+    optimize(CMAEvolutionStrategy(lambda, initialX, initialStd), Double.MaxValue, initialX)
 
   }
 

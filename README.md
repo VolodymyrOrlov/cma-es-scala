@@ -9,6 +9,20 @@ This library is a minimalistic Scala version of the CMA-ES algorithm as describe
 takes long time to compute your fitness function.
 * The strategy implementation is stateless and idempotent.
 
+## Using CMA-ES
+
+This project can be built with sbt 0.13. Add these lines to your SBT project definition:
+
+```scala
+
+resolvers += Resolver.bintrayRepo("volodymyr-orlov", "maven")
+
+libraryDependencies ++= Seq(
+  "com.sungevity" %% "cma-es-scala" % "1.0.1"
+)
+
+```
+
 Here is a minimal working example.:
  
  ```scala

@@ -4,7 +4,7 @@ organization := "com.sungevity"
 
 version := "1.0.1"
 
-crossScalaVersions := Seq("2.10.6", "2.11.7")
+crossScalaVersions := Seq("2.10.6", "2.11.8")
 
 scalacOptions += "-target:jvm-1.7"
 
@@ -19,3 +19,5 @@ libraryDependencies ++= Seq(
   "org.apache.commons" % "commons-lang3" % "3.4",
   "org.scalatest" %% "scalatest" % "2.2.4" % "test"
 )
+
+licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.html"))

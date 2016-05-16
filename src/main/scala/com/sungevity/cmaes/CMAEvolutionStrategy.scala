@@ -113,7 +113,7 @@ class CMAEvolutionStrategy private [cmaes] (iteration: Int,
     val EigSym(nD, nB) = eigSym(nC)
 
     new CMAEvolutionStrategy(
-      iteration,
+      iteration+1,
       lambda,
       n,
       psN,

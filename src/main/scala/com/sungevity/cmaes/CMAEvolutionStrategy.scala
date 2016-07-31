@@ -86,7 +86,7 @@ class CMAEvolutionStrategy private [cmaes] (val iteration: Int,
 
     val psN: DenseVector[Double] = (1.0-cs)*ps + sqrt(cs*(2.0-cs)*mueff) * invsqrtC * (newXMean - xMean) / sigma
 
-    val hsig = if(norm(psN) / math.sqrt(pow(1.0 - ( 1.0 - cs), (2.0 * iteration / lambda))) / chiN < 1.4 + 2.0/(n + 1.0)) 1.0 else 0.0
+    val hsig = if (norm(psN) / math.sqrt(1.0 - pow(1.0-cs, 2.0*(iteration+1))) / chiN < 1.4 + 2.0/(n + 1.0)) 1.0 else 0.0
 
     val pcN: DenseVector[Double] = (1.0-cc)*pc + hsig * sqrt(cc*(2.0-cc)*mueff) * (newXMean - xMean) / sigma
 

@@ -18,7 +18,7 @@ This project can be built with sbt 0.13. Add these lines to your SBT project def
 resolvers += Resolver.bintrayRepo("volodymyr-orlov", "maven")
 
 libraryDependencies ++= Seq(
-  "com.sungevity" %% "cma-es-scala" % "1.0.1"
+  "com.sungevity" %% "cma-es-scala" % "1.0.2"
 )
 
 ```
